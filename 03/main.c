@@ -30,16 +30,11 @@
 // | RESET       |     | PC6 |     |            |
 
 
-#define BV(bit)              (1 << bit)
-#define setBit(byte, bit)    (byte |= BV(bit))
-#define clearBit(byte, bit)  (byte &= ~BV(bit))
-#define toggleBit(byte, bit) (byte ^= BV(bit))
-
 int main (void)
 {
     //        76543210
     DDRD  = 0b10000000;  // defino PB5 como saida
-    PORTB |= (1<<5);     // aplicamos 5V no pino PB5
+    PORTD |= (1<<5);     // aplicamos 5V no pino PB5
 
     while (1)
         _delay_ms (2000);
