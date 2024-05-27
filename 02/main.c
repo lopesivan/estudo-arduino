@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-// -> Quero o pino 13 com 5V
+// -> Quero o pino 8 com 5V
 
 // | Digital Pin | PB# | PC# | PD# | Analog Pin |
 // | ----------- | --- | --- | --- | ---------- |
@@ -13,12 +13,12 @@
 // | 5           |     |     | PD5 |            |
 // | 6           |     |     | PD6 |            |
 // | 7           |     |     | PD7 |            |
-// | 8           | PB0 |     |     |            |
+//*|*8***********|*PB0*|*****|*****|************|
 // | 9           | PB1 |     |     |            |
 // | 10          | PB2 |     |     |            |
 // | 11          | PB3 |     |     |            |
 // | 12          | PB4 |     |     |            |
-//*|*13**********|*PB5*|*****|*****|************|
+// | 13          | PB5 |     |     |            |
 // | A0          |     | PC0 |     | A0         |
 // | A1          |     | PC1 |     | A1         |
 // | A2          |     | PC2 |     | A2         |
@@ -38,8 +38,8 @@
 int main (void)
 {
     //          543210
-    DDRB  = 0b00100000;  // defino PB5 como saida
-    PORTB |= (1<<5);     // aplicamos 5V no pino PB5
+    DDRB  = 0b00000001;  // defino PB5 como saida
+    PORTB |= (1<<0);     // aplicamos 5V no pino PB5
 
     while (1)
         _delay_ms (2000);
