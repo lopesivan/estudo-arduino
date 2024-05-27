@@ -29,12 +29,18 @@
 // | XTAL2       | PB7 |     |     |            |
 // | RESET       |     | PC6 |     |            |
 
+#define BV(bit)              (1 << bit)
+#define setBit(byte, bit)    (byte |= BV(bit))
+#define clearBit(byte, bit)  (byte &= ~BV(bit))
+#define toggleBit(byte, bit) (byte ^= BV(bit))
 
 int main (void)
 {
-    //          543210
-    DDRB  = 0b00000001;  // defino PB5 como saida
-    PORTB |= (1<<0);     // aplicamos 5V no pino PB5
+    DDRB = BV (0);
+    setBit (PORTB, 0);
+    //             543210
+    // DDRB  = 0b00000001;  // defino PB0 como saida
+    // PORTB |= (1<<0);     // aplicamos 5V no pino PB0
 
     while (1)
         _delay_ms (2000);

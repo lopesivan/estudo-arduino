@@ -30,11 +30,18 @@
 // | RESET       |     | PC6 |     |            |
 
 
+#define BV(bit)              (1 << bit)
+#define setBit(byte, bit)    (byte |= BV(bit))
+#define clearBit(byte, bit)  (byte &= ~BV(bit))
+#define toggleBit(byte, bit) (byte ^= BV(bit))
+
 int main (void)
 {
-    //          543210
-    DDRC  = 0b00010000;  // defino PB5 como saida
-    PORTC |= (1<<4);     // aplicamos 5V no pino PB5
+    DDRC = BV (4);
+    setBit (PORTC, 4);
+    //             543210
+    // DDRC  = 0b00010000;  // defino PC4 como saida
+    // PORTC |= (1<<4);     // aplicamos 5V no pino PC4
 
     while (1)
         _delay_ms (2000);
