@@ -79,3 +79,98 @@ Neste exemplo, o pino analógico A5 (PC5) é configurado
 como entrada, e o pino digital 5 (PD5) é configurado como
 saída. O LED conectado ao pino digital 5 (PD5) será aceso
 ou apagado com base no estado lido do pino analógico A5 (PC5).
+
+O Port B no ATmega328P, usado no Arduino Uno, é outro
+conjunto de pinos de I/O digitais. Assim como os Ports C e
+D, o Port B é designado por uma letra seguida de números
+(PB0 a PB7). Esses pinos têm várias funções e podem ser
+utilizados como entradas e saídas digitais.
+
+### Port B (PB#)
+
+O Port B é composto pelos pinos de PB0 a PB7. No Arduino Uno,
+esses pinos são mapeados para os pinos digitais D8 a D13,
+além dos pinos de cristal e do pino RESET.
+
+#### Mapeamento do Port B no Arduino Uno:
+
+- PB0: D8 (pino digital 8)
+- PB1: D9 (pino digital 9, com capacidade de PWM)
+- PB2: D10 (pino digital 10, com capacidade de PWM)
+- PB3: D11 (pino digital 11, com capacidade de PWM)
+- PB4: D12 (pino digital 12)
+- PB5: D13 (pino digital 13, geralmente conectado ao LED embutido)
+- PB6: XTAL1 (entrada do oscilador de cristal)
+- PB7: XTAL2 (saída do oscilador de cristal)
+
+### Exemplo de Uso
+
+Vamos configurar o pino PB5 (D13 no Arduino Uno) como saída
+para acender o LED embutido e o pino PB4 (D12 no Arduino Uno)
+como entrada para ler seu estado.
+
+```cpp
+void setup() {
+  // Configurar PB5 (D13) como saída
+  DDRB |= (1 << DDB5);
+
+  // Configurar PB4 (D12) como entrada
+  DDRB &= ~(1 << DDB4);
+}
+
+void loop() {
+  // Ler o estado do pino PB4 (D12)
+  if (PINB & (1 << PINB4)) {
+    // Se PB4 está alto, acender o LED no pino PB5 (D13)
+    PORTB |= (1 << PORTB5);
+  } else {
+    // Se PB4 está baixo, apagar o LED no pino PB5 (D13)
+    PORTB &= ~(1 << PORTB5);
+  }
+}
+```
+
+### Explicação
+
+1. **Configuração do pino PB5 (D13) como saída:**
+
+   ```cpp
+   DDRB |= (1 << DDB5);
+   ```
+
+   Esta linha de código em C++ configura o pino PB5 (D13)
+   como saída. `DDRB` é o registrador de direção de dados
+   para o port B.
+
+2. **Configuração do pino PB4 (D12) como entrada:**
+
+   ```cpp
+   DDRB &= ~(1 << DDB4);
+   ```
+
+   Esta linha de código em C++ configura o pino PB4 (D12)
+   como entrada.
+
+3. **Ler o estado do pino PB4 (D12):**
+   ```cpp
+   if (PINB & (1 << PINB4)) {
+     PORTB |= (1 << PORTB5);
+   } else {
+     PORTB &= ~(1 << PORTB5);
+   }
+   ```
+   O estado do pino PB4 é lido e, se estiver alto, o LED no
+   pino PB5 (D13) é aceso. Se estiver baixo, o LED é apagado.
+
+### Resumo dos Ports no ATmega328P
+
+- **Port B (PB#)**: Utilizado para pinos digitais (D8 a D13),
+  incluindo pinos para PWM e pinos de cristal.
+- **Port C (PC#)**: Utilizado principalmente para entradas
+  analógicas (A0 a A5) e o pino RESET (PC6).
+- **Port D (PD#)**: Utilizado para pinos digitais (D0 a D7),
+  incluindo pinos para comunicação serial (RX, TX) e PWM.
+
+Essas portas permitem uma ampla gama de possibilidades para a
+configuração e utilização dos pinos do microcontrolador,
+dependendo das necessidades específicas do seu projeto.
