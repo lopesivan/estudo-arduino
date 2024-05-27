@@ -45,13 +45,6 @@ int main (void)
     setBit (DDRB, LED_PIN);
     while (1)
     {
-        // Liga o LED
-        //PORTB |= (1 << LED_PIN);
-        setBit (PORTB, LED_PIN);
-        _delay_ms (1000); // Espera por 1000 milissegundos
-
-        // Desliga o LED
-        // PORTB &= ~ (1 << LED_PIN);
         toggleBit (PORTB, LED_PIN);
         _delay_ms (1000); // Espera por 1000 milissegundos
     }
