@@ -1,5 +1,5 @@
-#ifndef OFF_H
-#define OFF_H
+#ifndef UTIL_H
+#define UTIL_H
 
 /*****************************************************************************
  *                                                                           *
@@ -7,7 +7,10 @@
  *                                                                           *
  *****************************************************************************/
 
-int off (volatile uint8_t* port, uint8_t mask);
+#define BV(bit)              (1 << bit)
+#define setBit(byte, bit)    (byte |= BV(bit))
+#define clearBit(byte, bit)  (byte &= ~BV(bit))
+#define toggleBit(byte, bit) (byte ^= BV(bit))
 
-#endif      // OFF_H
+#endif 		// UTIL_H
 /* -*- vim: set ts=4 sw=4 tw=78 ft=header: -*- */
