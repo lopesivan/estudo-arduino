@@ -38,12 +38,13 @@ int toogle_led()
     if (light == OFF)
     {
         PORTB ^= (1<<LED);
-//                76543210
+        //                76543210
         PORTB = 0b00010010;
         light = ON;
-    } else
+    }
+    else
     {
-//                76543210
+        //                76543210
         PORTB = 0b00010010;
         light = OFF;
     }
@@ -53,14 +54,14 @@ int toogle_led()
 
 int main (void)
 {
-//           76543210
+    //           76543210
     DDRB = 0b00000010;
-//  DDRB = (1<<LED);
+    //  DDRB = (1<<LED);
 
-//            76543210
+    //            76543210
     PORTB = 0b00010000;
-//  PORTB = (1<<BUTTON);
-//
+    //  PORTB = (1<<BUTTON);
+    //
     while (1)
     {
         if (button_is_pushed)
