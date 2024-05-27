@@ -1,74 +1,63 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#define LED 1
-#define BUTTON 4
-#define ON 1
-#define OFF 0
+// -> Quero o pino 13 com 5V
 
-#define BV(bit) (1 << bit)
-#define setBit(byte, bit) (byte |= BV(bit))
-#define clearBit(byte, bit) (byte &= ~BV(bit))
+// | Digital Pin | PB# | PC# | PD# | Analog Pin |
+// | ----------- | --- | --- | --- | ---------- |
+// | 0           |     |     | PD0 |            |
+// | 1           |     |     | PD1 |            |
+// | 2           |     |     | PD2 |            |
+// | 3           |     |     | PD3 |            |
+// | 4           |     |     | PD4 |            |
+// | 5           |     |     | PD5 |            |
+// | 6           |     |     | PD6 |            |
+// | 7           |     |     | PD7 |            |
+// | 8           | PB0 |     |     |            |
+// | 9           | PB1 |     |     |            |
+// | 10          | PB2 |     |     |            |
+// | 11          | PB3 |     |     |            |
+// | 12          | PB4 |     |     |            |
+// | 13          | PB5 |     |     |            |
+// | A0          |     | PC0 |     | A0         |
+// | A1          |     | PC1 |     | A1         |
+// | A2          |     | PC2 |     | A2         |
+// | A3          |     | PC3 |     | A3         |
+// | A4          |     | PC4 |     | A4         |
+// | A5          |     | PC5 |     | A5         |
+// | XTAL1       | PB6 |     |     |            |
+// | XTAL2       | PB7 |     |     |            |
+// | RESET       |     | PC6 |     |            |
+
+
+#define BV(bit)              (1 << bit)
+#define setBit(byte, bit)    (byte |= BV(bit))
+#define clearBit(byte, bit)  (byte &= ~BV(bit))
 #define toggleBit(byte, bit) (byte ^= BV(bit))
-
-int light = OFF;
-
-int button_is_pushed (void)
-{
-    /* pushed=0 and not_pushed=1 */
-    return ! (PINB & (1<<BUTTON));
-}
-
-/*
-int light_up_led(void)
-{
-
-    return 0;
-}
-
-int light_down_led(void)
-{
-
-    return 0;
-}
-*/
-
-int toogle_led()
-{
-    if (light == OFF)
-    {
-        PORTB ^= (1<<LED);
-        //                76543210
-        PORTB = 0b00010010;
-        light = ON;
-    }
-    else
-    {
-        //                76543210
-        PORTB = 0b00010010;
-        light = OFF;
-    }
-
-    return 0;
-}
 
 int main (void)
 {
-    //           76543210
-    DDRB = 0b00000010;
-    //  DDRB = (1<<LED);
+    //          543210
+    DDRB  = 0b00100000;  // defino PB5 como saida
+    PORTB |= (1<<5);     // aplicamos 5V no pino PB5
 
-    //            76543210
-    PORTB = 0b00010000;
-    //  PORTB = (1<<BUTTON);
-    //
+    while (1)
+        _delay_ms (2000);
+
+    /* set PORTB for output
+    uint8_t pb5 = 5;
+    DDRB = BV (pb5);
+    setBit (PORTB, pb5);
+
     while (1)
     {
-        if (button_is_pushed)
+        if (isPushed (PINB, pb4))
         {
-            toogle_led();
+            toggleBit (PORTB, pb1);
+            _delay_ms (2000);
         }
     }
+    */
 
     return 0;
 }
