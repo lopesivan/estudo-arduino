@@ -35,16 +35,24 @@
 #define clearBit(byte, bit)  (byte &= ~BV(bit))
 #define toggleBit(byte, bit) (byte ^= BV(bit))
 
+#define LED_PIN PB5 // Define o pino do LED como PB5 (pino 13 no Arduino)
+
 int main (void)
 {
-    DDRD = BV (7);
-    setBit (PORTD, 7);
-    //           76543210
-    // DDRD  = 0b10000000;  // defino PD7 como saida
-    // PORTD |= (1<<5);     // aplicamos 5V no pino PD7
+
+    // Configura o pino PB5 como saída
+    DDRB |= (1 << LED_PIN);
 
     while (1)
-        _delay_ms (2000);
+    {
+        // Liga o LED
+        PORTB |= (1 << LED_PIN);
+        _delay_ms (1000); // Espera por 1000 milissegundos
+
+        // Desliga o LED
+        PORTB &= ~ (1 << LED_PIN);
+        _delay_ms (1000); // Espera por 1000 milissegundos
+    }
 
     return 0;
 }
