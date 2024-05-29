@@ -4,8 +4,8 @@ HEX  = main.hex
 ##############################################################################
 # ubuntu install: sudo apt install gcc-avr avr-libc binutils-avr avrdude make
 ##############################################################################
-PORT        = /dev/ttyACM0
-
+# PORT        = /dev/ttyACM0
+PORT        = /dev/ttyUSB0
 # The path of Arduino IDE
 ARDUINO_DIR = /opt/arduino-0022
 # Boardy type: use "arduino" for Uno or "stk500v1" for Duemilanove
@@ -41,9 +41,9 @@ $(BIN).lst: $(BIN)
 	$(AVR_OBJDUMP) -d $+ >$@
 
 up:
-	avrdude -F -V -c arduino -p $(call uc,$(MCU)) -P $(PORT) -b $(BAUD_RATE) -U flash:w:$(HEX)
+	avrdude -F -V -c arduino -p $(MCU) -P $(PORT) -b $(BAUD_RATE) -U flash:w:$(HEX)
 backup:
-	avrdude -F -V -c arduino -p $(call uc,$(MCU)) -P $(PORT) -b $(BAUD_RATE) -U flash:r:flash_backup.hex:i
+	avrdude -F -V -c arduino -p $(MCU) -P $(PORT) -b $(BAUD_RATE) -U flash:r:flash_backup.hex:i
 
 clean:
 	rm -f $(OBJS) $(BIN) $(HEX) $(BIN).lst core
