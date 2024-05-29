@@ -30,7 +30,7 @@
 // | XTAL2       | PB7 |     |     |            |
 // | RESET       |     | PC6 |     |            |
 
-
+#define PWM_TOP 26666    // Valor de TOP para gerar 60Hz
 volatile uint16_t adc_value = 0; // Variável global para armazenar o valor do ADC
 
 // Função para inicializar o ADC
@@ -55,7 +55,7 @@ void pwm_init (void)
     TCCR1A = (1 << COM1A1) | (1 << WGM11);
     TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS10); // Prescaler 1
     // Define o valor do TOP para gerar uma frequência de 60Hz
-    ICR1 = 26666; // (16 MHz / (60 * 1)) - 1
+    ICR1 = PWM_TOP; // (16 MHz / (60 * 1)) - 1
 }
 
 // Função para iniciar uma conversão ADC
@@ -70,7 +70,7 @@ ISR (ADC_vect)
     adc_value = ADC; // Lê o valor do ADC
     // Atualiza o ciclo de trabalho do PWM com base no valor do ADC
     // Ajuste proporcional para 0-3.3V correspondendo a 0-100% ciclo de trabalho
-    OCR1A = (uint16_t) (((uint32_t)adc_value * 26666) / 1023);
+    OCR1A = (uint16_t) (((uint32_t)adc_value * PWM_TOP) / 1023);
     // Inicia uma nova conversão ADC
     start_adc_conversion();
 }

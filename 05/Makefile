@@ -41,9 +41,9 @@ $(BIN).lst: $(BIN)
 	$(AVR_OBJDUMP) -d $+ >$@
 
 up:
-	echo avrdude -F -V -c arduino -p $(call uc,$(MCU)) -P $(PORT) -b $(BAUD_RATE) -U flash:w:$(HEX)
+	avrdude -F -V -c arduino -p $(call uc,$(MCU)) -P $(PORT) -b $(BAUD_RATE) -U flash:w:$(HEX)
 backup:
-	echo avrdude -F -V -c arduino -p $(call uc,$(MCU)) -P $(PORT) -b $(BAUD_RATE) -U flash:r:flash_backup.hex:i
+	avrdude -F -V -c arduino -p $(call uc,$(MCU)) -P $(PORT) -b $(BAUD_RATE) -U flash:r:flash_backup.hex:i
 
 clean:
 	rm -f $(OBJS) $(BIN) $(HEX) $(BIN).lst core
