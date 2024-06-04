@@ -38,7 +38,7 @@
 #define clearBit(byte, bit)  (byte &= ~_BV(bit))
 #define toggleBit(byte, bit) (byte ^= _BV(bit))
 
-ISR (INT0_vect)
+ISR (TIMER1_COMPA_vect)
 {
     // Alterna o estado do LED no pino 13
     toggleBit (PORTB, PORTB5);
