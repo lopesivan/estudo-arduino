@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 // -> Quero o pino 13 com 5V
 
@@ -33,10 +34,15 @@
 #define EXIT_FAILURE 1
 #define NULL 0
 
+#define setBit(byte, bit)    (byte |= _BV(bit))
+#define clearBit(byte, bit)  (byte &= ~_BV(bit))
+#define toggleBit(byte, bit) (byte ^= _BV(bit))
+
 ISR (INT0_vect)
 {
     // Alterna o estado do LED no pino 13
-    PORTB ^= (1 << PORTB5);
+    //PORTB ^= (1 << PB5);
+    toggleBit (PORTB, PORTB5);
 }
 
 void loop()
@@ -47,17 +53,22 @@ void loop()
 int main (void)
 {
     // Configura o pino 13 como saída
-    DDRB |= (1 << DDB5);
+    //DDRB |= (1 << DDB5);
+    setBit (DDRB, DDB5);
 
     // Configura o pino 2 (INT0) como entrada
-    DDRD &= ~ (1 << DDD2);
+    //DDRD &= ~ (1 << DDD2);
+    clearBit (DDRD, DDD5);
 
     // Habilita a interrupção externa INT0
-    EIMSK |= (1 << INT0);
+    // EIMSK |= (1 << INT0);
+    setBit (EIMSK, INT0);
 
     // Configura a interrupção para disparar na borda de descida
-    EICRA |= (1 << ISC01);
-    EICRA &= ~ (1 << ISC00);
+    // EICRA |= (1 << ISC01);
+    // EICRA &= ~ (1 << ISC00);
+    setBit (EICRA, ISC01);
+    clearBit (EICRA, ISC00);
 
     // Habilita interrupções globais
     sei();
@@ -66,4 +77,6 @@ int main (void)
     {
         loop();
     }
+
+    return EXIT_SUCCESS;
 }

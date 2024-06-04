@@ -1,0 +1,24 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/avr-gcc",
+      "-c",
+      "-Os",
+      "-w",
+      "-Wall",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-fno-exceptions",
+      "-std=gnu99",
+      "-DF_CPU=16000000UL",
+      "-mmcu=atmega328p",
+      "-c",
+      "-o",
+      "main.o",
+      "main.c"
+    ],
+    "directory": "/workspace/estudo-arduino/01",
+    "file": "/workspace/estudo-arduino/01/main.c",
+    "output": "/workspace/estudo-arduino/01/main.o"
+  }
+]
