@@ -41,7 +41,6 @@
 ISR (INT0_vect)
 {
     // Alterna o estado do LED no pino 13
-    //PORTB ^= (1 << PB5);
     toggleBit (PORTB, PORTB5);
 }
 
@@ -56,48 +55,12 @@ int main (void)
     //DDRB |= (1 << DDB5);
     setBit (DDRB, DDB5);
 
-    // Configura o pino 2 (INT0) como entrada
-    //DDRD &= ~ (1 << DDD2);
-    clearBit (DDRD, DDD5);
+    // Configura o temporizador 1 para gerar uma interrupção a cada 1 segundo
+    setBit (TCCR1B, WGM12); // Modo CTC
 
-    // Habilita a interrupção externa INT0
-    // EIMSK |= (1 << INT0);
-    setBit (EIMSK, INT0);
-
-    // Configura a interrupção para disparar na borda de descida
-    // EICRA |= (1 << ISC01);
-    // EICRA &= ~ (1 << ISC00);
-    setBit (EICRA, ISC01);
-    clearBit (EICRA, ISC00);
-
-    // ***********************************************************************
-
-    // - **Nível baixo:**
-
-    //   ```c
-    //   clearBit(EICRA, ISC01);
-    //   clearBit(EICRA, ISC00);
-    //   ```
-
-    // - **Qualquer mudança de nível:**
-
-    //   ```c
-    //   clearBit(EICRA, ISC01);
-    //   setBit(EICRA, ISC00);
-    //   ```
-
-    // - **Borda de descida:**
-
-    //   ```c
-    //   setBit(EICRA, ISC01);
-    //   clearBit(EICRA, ISC00);
-    //   ```
-
-    // - **Borda de subida:**
-    //   ```c
-    //   setBit(EICRA, ISC01);
-    //   setBit(EICRA, ISC00);
-    //   ```
+    OCR1A = 15624;           // Valor de comparação para 1 Hz (prescaler 1024)
+    setBit (TIMSK1, OCIE1A); // Habilita interrupção de comparação A
+    TCCR1B |= _BV (CS12) | _BV (CS10); // Prescaler 1024
 
     // Habilita interrupções globais
     sei();
