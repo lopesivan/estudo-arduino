@@ -207,4 +207,110 @@ para configurar o prescaler para 64:
 setADCPrescaler(64);
 ```
 
-Esta função ajusta os bits `ADPS2`, `ADPS1` e `ADPS0` no registrador `ADCSRA` para definir o prescaler do ADC, modificando a taxa de amostragem conforme necessário.
+Esta função ajusta os bits `ADPS2`, `ADPS1` e `ADPS0`
+no registrador `ADCSRA` para definir o prescaler do ADC,
+modificando a taxa de amostragem conforme necessário.
+
+Claro, Ivan! Vamos detalhar como o ajuste do prescaler do ADC
+pode aumentar ou diminuir a taxa de amostragem, com cálculos
+específicos para cada valor de prescaler.
+
+### Frequência do Clock do ADC
+
+O ADC no Arduino Uno (com o microcontrolador ATmega328P)
+opera a partir da frequência de clock do microcontrolador,
+que é 16 MHz. O prescaler divide essa frequência para obter
+a frequência de operação do ADC.
+
+### Valores do Prescaler e Taxa de Amostragem
+
+Vamos calcular a frequência de operação do ADC para cada
+valor de prescaler disponível:
+
+1. **Prescaler 2:**
+
+   - Frequência do ADC: \( \frac{16.000.000 \text{ Hz}}{2} = 8.000.000 \text{ Hz} \)
+   - Tempo de conversão (13 ciclos de clock do ADC): \( \frac{13}{8.000.000} = 1.625 \times 10^{-6} \text{ segundos} = 1.625 \text{ μs} \)
+   - Taxa de amostragem: \( \frac{1}{1.625 \times 10^{-6}} \approx 615.385 \text{ amostras/segundo} \)
+
+2. **Prescaler 4:**
+
+   - Frequência do ADC: \( \frac{16.000.000 \text{ Hz}}{4} = 4.000.000 \text{ Hz} \)
+   - Tempo de conversão: \( \frac{13}{4.000.000} = 3.25 \times 10^{-6} \text{ segundos} = 3.25 \text{ μs} \)
+   - Taxa de amostragem: \( \frac{1}{3.25 \times 10^{-6}} \approx 307.692 \text{ amostras/segundo} \)
+
+3. **Prescaler 8:**
+
+   - Frequência do ADC: \( \frac{16.000.000 \text{ Hz}}{8} = 2.000.000 \text{ Hz} \)
+   - Tempo de conversão: \( \frac{13}{2.000.000} = 6.5 \times 10^{-6} \text{ segundos} = 6.5 \text{ μs} \)
+   - Taxa de amostragem: \( \frac{1}{6.5 \times 10^{-6}} \approx 153.846 \text{ amostras/segundo} \)
+
+4. **Prescaler 16:**
+
+   - Frequência do ADC: \( \frac{16.000.000 \text{ Hz}}{16} = 1.000.000 \text{ Hz} \)
+   - Tempo de conversão: \( \frac{13}{1.000.000} = 13 \times 10^{-6} \text{ segundos} = 13 \text{ μs} \)
+   - Taxa de amostragem: \( \frac{1}{13 \times 10^{-6}} \approx 76.923 \text{ amostras/segundo} \)
+
+5. **Prescaler 32:**
+
+   - Frequência do ADC: \( \frac{16.000.000 \text{ Hz}}{32} = 500.000 \text{ Hz} \)
+   - Tempo de conversão: \( \frac{13}{500.000} = 26 \times 10^{-6} \text{ segundos} = 26 \text{ μs} \)
+   - Taxa de amostragem: \( \frac{1}{26 \times 10^{-6}} \approx 38.462 \text{ amostras/segundo} \)
+
+6. **Prescaler 64:**
+
+   - Frequência do ADC: \( \frac{16.000.000 \text{ Hz}}{64} = 250.000 \text{ Hz} \)
+   - Tempo de conversão: \( \frac{13}{250.000} = 52 \times 10^{-6} \text{ segundos} = 52 \text{ μs} \)
+   - Taxa de amostragem: \( \frac{1}{52 \times 10^{-6}} \approx 19.231 \text{ amostras/segundo} \)
+
+7. **Prescaler 128:**
+   - Frequência do ADC: \( \frac{16.000.000 \text{ Hz}}{128} = 125.000 \text{ Hz} \)
+   - Tempo de conversão: \( \frac{13}{125.000} = 104 \times 10^{-6} \text{ segundos} = 104 \text{ μs} \)
+   - Taxa de amostragem: \( \frac{1}{104 \times 10^{-6}} \approx 9.615 \text{ amostras/segundo} \)
+
+### Ajustando o Prescaler no Código
+
+Aqui está como você pode ajustar o prescaler do ADC no seu
+código para obter diferentes taxas de amostragem:
+
+```c
+void setADCPrescaler(uint8_t prescaler) {
+    switch (prescaler) {
+        case 2:
+            ADCSRA = (ADCSRA & ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))) | (1 << ADPS0);
+            break;
+        case 4:
+            ADCSRA = (ADCSRA & ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))) | (1 << ADPS1);
+            break;
+        case 8:
+            ADCSRA = (ADCSRA & ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))) | (1 << ADPS1) | (1 << ADPS0);
+            break;
+        case 16:
+            ADCSRA = (ADCSRA & ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))) | (1 << ADPS2);
+            break;
+        case 32:
+            ADCSRA = (ADCSRA & ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))) | (1 << ADPS2) | (1 << ADPS0);
+            break;
+        case 64:
+            ADCSRA = (ADCSRA & ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))) | (1 << ADPS2) | (1 << ADPS1);
+            break;
+        case 128:
+            ADCSRA = (ADCSRA & ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+            break;
+        default:
+            // Configuração padrão para prescaler 128
+            ADCSRA = (ADCSRA & ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+            break;
+    }
+}
+```
+
+Você pode chamar esta função com o valor do prescaler
+desejado para ajustar a taxa de amostragem do ADC conforme
+necessário. Por exemplo, para configurar o prescaler para 64:
+
+```c
+setADCPrescaler(64);
+```
+
+Dessa forma, você pode ajustar a taxa de amostragem do ADC no Arduino para se adequar à sua aplicação específica.
