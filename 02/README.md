@@ -170,6 +170,16 @@ void setup() {
     TIMSK1 |= (1 << OCIE1A); // Habilita interrupção de comparação A
     TCCR1B |= (1 << CS12) | (1 << CS10); // Prescaler 1024
 
+    // CS12 | CS11 | CS10 |
+    // 0    | 0    | 0    | No clock soutce
+    // 0    | 0    | 1    | clk/1 (No prescaling)
+    // 0    | 1    | 0    | clk/8 (From prescaler)
+    // 0    | 1    | 1    | clk/64 (From prescaler)
+    // 1    | 0    | 0    | clk/256 (From prescaler)
+    // 1    | 0    | 1    | clk/1024 (From prescaler)
+    // 1    | 1    | 0    | external clock source T1 pin    falling
+    // 1    | 1    | 1    | external clock source T1 pin    rising
+
     // Habilita interrupções globais
     sei();
 }
