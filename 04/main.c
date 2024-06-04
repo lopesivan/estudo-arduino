@@ -41,6 +41,7 @@
 ISR (TIMER1_COMPA_vect)
 {
     TCNT1 = 0xC2F7;                                 // Renicia TIMER
+    // TCNT1 = 0xEBA7;    // 3s
     // Alterna o estado do LED no pino 13
     toggleBit (PORTB, PORTB5);
 }
@@ -65,7 +66,8 @@ int main (void)
 
     // incia timer com valor para que estouro ocorra em 1 segundo
     // 65536-(16MHz/1024/1Hz) = 49911 = 0xC2F7
-    TCNT1 = 0xC2F7;
+    TCNT1 = 0xC2F7;  //1s
+    // TCNT1 = 0xEBA7;    // 3s
 
     // > 65536 - (16E6/ (1024));
     // 49911.00000
@@ -78,7 +80,8 @@ int main (void)
 
     // > 65536 - (16E6/ (1024*3));
     // 60327.66667
-
+    // 60327 -> 0xeba7
+    //
     // > 65536 - (16E6/ (1024*4));
     // 61629.75000
 

@@ -58,7 +58,31 @@ int main (void)
     // Configura o temporizador 1 para gerar uma interrupção a cada 1 segundo
     setBit (TCCR1B, WGM12); // Modo CTC
 
-    OCR1A = 15624;           // Valor de comparação para 1 Hz (prescaler 1024)
+    // > 16E6/(1024*1) -1;
+    //                                      15624.00000
+
+    // > 16E6/(1024*2) -1;
+    //                                      7811.500000
+
+    // > 16E6/(1024*3) -1;
+    //                                      5207.333333
+
+    // > 16E6/(1024*4) -1;
+    // 3905.250000
+
+    // > 16E6/(1024*4) -1;
+    //                                      3905.250000
+
+    // > 16E6/(1024/4) -1;
+    //                                      62499.00000
+
+    // > 16E6/(1024/3) -1;
+    //                                      46874.00000
+
+    // > 16E6/(1024/2) -1;
+    // 31249.00000
+
+    OCR1A = 31249;           // Valor de comparação para 1 Hz (prescaler 1024)
     setBit (TIMSK1, OCIE1A); // Habilita interrupção de comparação A
     TCCR1B |= _BV (CS12) | _BV (CS10); // Prescaler 1024
 
