@@ -33,87 +33,37 @@
 #define EXIT_FAILURE 1
 #define NULL 0
 
-enum _bool
+ISR (INT0_vect)
 {
-    false = 0,
-    true  = 1
-};
+    // Alterna o estado do LED no pino 13
+    PORTB ^= (1 << PORTB5);
+}
 
-typedef enum _bool bool;
-
-typedef volatile uint8_t* address;
-
-#define PORTX(led, X, num) do { \
-    led.address = &DDR##X;      \
-    led.id_addr = DD##X##num;   \
-    led.port    = &PORT##X;     \
-    led.id_port = PORT##X##num; \
-} while(0)
-
-struct gpio_t
+void loop()
 {
-    address  address;
-    uint8_t  id_addr;
-    address  port;
-    uint8_t  id_port;
-};
-
-typedef struct gpio_t gpio;
-
-
-int output   (address port, uint8_t mask);
-int turn_on  (address port, uint8_t mask);
-int turn_off (address port, uint8_t mask);
-
-typedef int (*function) (address, uint8_t);
-
-enum
-{
-    BLINK_DELAY_MS = 1000,
-};
+    // O loop principal fica vazio, pois a ação é tratada pela interrupção
+}
 
 int main (void)
 {
-    function f = NULL;
+    // Configura o pino 13 como saída
+    DDRB |= (1 << DDB5);
 
-    gpio fonte;
+    // Configura o pino 2 (INT0) como entrada
+    DDRD &= ~ (1 << DDD2);
 
-    PORTX (fonte, B, 5);
+    // Habilita a interrupção externa INT0
+    EIMSK |= (1 << INT0);
 
-    f = output;
-    f (fonte.address, fonte.id_addr);
+    // Configura a interrupção para disparar na borda de descida
+    EICRA |= (1 << ISC01);
+    EICRA &= ~ (1 << ISC00);
 
-    bool finished = false;
+    // Habilita interrupções globais
+    sei();
 
-    f = turn_on;
-    f (fonte.port, fonte.id_port);
-
-    while (!finished)
+    while (1)
     {
-        _delay_ms (BLINK_DELAY_MS);
+        loop();
     }
-
-    return EXIT_SUCCESS;
-}
-
-
-int output (address port, uint8_t mask)
-{
-    *port |= _BV (mask);
-
-    return 0;
-}
-
-int turn_on (address port, uint8_t mask)
-{
-    output (port, mask);
-
-    return 0;
-}
-
-int turn_off (address port, uint8_t mask)
-{
-    *port &= ~ _BV (mask);
-
-    return 0;
 }
