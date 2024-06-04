@@ -38,10 +38,13 @@
 #define clearBit(byte, bit)  (byte &= ~_BV(bit))
 #define toggleBit(byte, bit) (byte ^= _BV(bit))
 
-ISR (TIMER1_COMPA_vect)
+#define TIMER_LOCAL 49911
+
+ISR (TIMER1_OVF_vect)
 {
-    TCNT1 = 0xC2F7;                                 // Renicia TIMER
+    // TCNT1 = 49911;                                 // Renicia TIMER
     // TCNT1 = 0xEBA7;    // 3s
+    TCNT1 = TIMER_LOCAL;
     // Alterna o estado do LED no pino 13
     toggleBit (PORTB, PORTB5);
 }
@@ -66,26 +69,24 @@ int main (void)
 
     // incia timer com valor para que estouro ocorra em 1 segundo
     // 65536-(16MHz/1024/1Hz) = 49911 = 0xC2F7
-    TCNT1 = 0xC2F7;  //1s
+    // TCNT1 = 49911;  //1s
+    TCNT1 = TIMER_LOCAL;
     // TCNT1 = 0xEBA7;    // 3s
 
-    // > 65536 - (16E6/ (1024));
-    // 49911.00000
+    // > 65536 - (16E6/1024/1);
+    //                                      49911.00000
 
-    // > 65536 - (16E6/ (1024*1));
-    // 49911.00000
+    // > 65536 - (16E6/1024/2);
+    //                                      57723.50000
 
-    // > 65536 - (16E6/ (1024*2));
-    // 57723.50000
+    // > 65536 - (16E6/1024/3);
+    //                                      60327.66667
 
-    // > 65536 - (16E6/ (1024*3));
-    // 60327.66667
-    // 60327 -> 0xeba7
-    //
-    // > 65536 - (16E6/ (1024*4));
-    // 61629.75000
+    // > 65536 - (16E6/1024/4);
+    //                                      61629.75000
 
-
+    // > 65536 - (16E6/1024/5);
+    //                                      62411.00000
 
     // Nesse exemplo o timer foi configurado para modo
     // normal, com pinos OC1A e OC1B desconectados (TCCR1A =
