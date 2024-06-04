@@ -67,37 +67,6 @@ int main (void)
     // 65536-(16MHz/1024/1Hz) = 49911 = 0xC2F7
     TCNT1 = 0xC2F7;
 
-    // > 65536 - (16E6/ (1024));
-    // 49911.00000
-
-    // > 65536 - (16E6/ (1024*1));
-    // 49911.00000
-
-    // > 65536 - (16E6/ (1024*2));
-    // 57723.50000
-
-    // > 65536 - (16E6/ (1024*3));
-    // 60327.66667
-
-    // > 65536 - (16E6/ (1024*4));
-    // 61629.75000
-
-
-
-    // Nesse exemplo o timer foi configurado para modo
-    // normal, com pinos OC1A e OC1B desconectados (TCCR1A =
-    // 0). Foi selecionado o prescaler para 1024 através
-    // do registrador TCCR1B.  Para que o timer estoure a
-    // cada segundo é necessário iniciar seu valor com a
-    // diferença entre o seu valor máximo (65536) e o período
-    // desejado. O período é calculado levando em consideração
-    // a frequência do oscilador e o prescaler selecionado,
-    // além da frequência de interrupção desejada. Por
-    // fim foi habilitada a interrupção de estouro do TIMER1
-    // através do bit T0IE1 do registrador TIMSK1. A inversão
-    // do LED é feita na rotina de interrupção, note que é
-    // necessário recarregar o timer para a correta contagem.
-
     TIMSK1 |= (1 << TOIE1);           // habilita a interrupção do TIMER1
 
     // Habilita interrupções globais
