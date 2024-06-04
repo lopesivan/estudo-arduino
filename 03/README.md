@@ -44,6 +44,8 @@ analógicas. Vamos explorar os detalhes:
      operação do ADC.
    - Por exemplo, com um prescaler de 16 e um clock do
      microcontrolador de 16 MHz, a frequência do ADC seria:
+
+```math
      \[
      \frac{16\text{ MHz}}{16} = 1\text{ MHz}
      \]
@@ -51,9 +53,11 @@ analógicas. Vamos explorar os detalhes:
      \[
      \frac{13 \text{ ciclos}}{1\text{ MHz}} = 13 \text{ us}
      \]
-   - Isso permitiria uma taxa de amostragem máxima de cerca de
-     77 kHz. Contudo, taxas mais altas podem reduzir a precisão
-     da conversão.
+```
+
+- Isso permitiria uma taxa de amostragem máxima de cerca de
+  77 kHz. Contudo, taxas mais altas podem reduzir a precisão
+  da conversão.
 
 ### Exemplo de Ajuste do Prescaler
 
