@@ -70,6 +70,35 @@ int main (void)
     setBit (EICRA, ISC01);
     clearBit (EICRA, ISC00);
 
+    // ***********************************************************************
+
+    // - **Nível baixo:**
+
+    //   ```c
+    //   clearBit(EICRA, ISC01);
+    //   clearBit(EICRA, ISC00);
+    //   ```
+
+    // - **Qualquer mudança de nível:**
+
+    //   ```c
+    //   clearBit(EICRA, ISC01);
+    //   setBit(EICRA, ISC00);
+    //   ```
+
+    // - **Borda de descida:**
+
+    //   ```c
+    //   setBit(EICRA, ISC01);
+    //   clearBit(EICRA, ISC00);
+    //   ```
+
+    // - **Borda de subida:**
+    //   ```c
+    //   setBit(EICRA, ISC01);
+    //   setBit(EICRA, ISC00);
+    //   ```
+
     // Habilita interrupções globais
     sei();
 

@@ -241,3 +241,87 @@ as configurações possíveis para `ISC01` e `ISC00`:
 Portanto, as linhas de código fornecidas configuram
 corretamente a interrupção para disparar quando o sinal no
 pino INT0 passa de alto para baixo (borda de descida).
+
+Claro, aqui estão as quatro possíveis configurações
+de disparo para a interrupção INT0 no microcontrolador
+ATmega328P (usado no Arduino Uno) em C.
+
+### Configuração para Nível Baixo
+
+Para disparar a interrupção quando o nível do pino INT0
+estiver baixo:
+
+```c
+// Configura a interrupção para disparar no nível baixo
+EICRA &= ~(1 << ISC01);
+EICRA &= ~(1 << ISC00);
+```
+
+### Configuração para Qualquer Mudança de Nível
+
+Para disparar a interrupção em qualquer mudança de nível
+(subida ou descida):
+
+```c
+// Configura a interrupção para disparar em qualquer mudança de nível
+EICRA &= ~(1 << ISC01);
+EICRA |= (1 << ISC00);
+```
+
+### Configuração para Borda de Descida
+
+Para disparar a interrupção na borda de descida (falling
+edge):
+
+```c
+// Configura a interrupção para disparar na borda de descida
+EICRA |= (1 << ISC01);
+EICRA &= ~(1 << ISC00);
+```
+
+### Configuração para Borda de Subida
+
+Para disparar a interrupção na borda de subida (rising edge):
+
+```c
+// Configura a interrupção para disparar na borda de subida
+EICRA |= (1 << ISC01);
+EICRA |= (1 << ISC00);
+```
+
+### Resumo
+
+Estas configurações alteram os bits `ISC01` e `ISC00`
+no registrador `EICRA` para definir o modo de disparo da
+interrupção INT0:
+
+- **Nível baixo:**
+
+  ```c
+  EICRA &= ~(1 << ISC01);
+  EICRA &= ~(1 << ISC00);
+  ```
+
+- **Qualquer mudança de nível:**
+
+  ```c
+  EICRA &= ~(1 << ISC01);
+  EICRA |= (1 << ISC00);
+  ```
+
+- **Borda de descida:**
+
+  ```c
+  EICRA |= (1 << ISC01);
+  EICRA &= ~(1 << ISC00);
+  ```
+
+- **Borda de subida:**
+  ```c
+  EICRA |= (1 << ISC01);
+  EICRA |= (1 << ISC00);
+  ```
+
+Cada configuração ajusta os bits `ISC01` e `ISC00` para
+definir a condição de disparo desejada para a interrupção
+INT0.
