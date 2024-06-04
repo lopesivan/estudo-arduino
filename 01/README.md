@@ -152,3 +152,92 @@ int main(void) {
 
 Com esses exemplos, você deve ter uma boa base para começar
 a usar interrupções no Arduino usando a linguagem C.
+
+Claro! Vou explicar como essas linhas de código configuram a
+interrupção para disparar na borda de descida (falling edge)
+no Arduino, utilizando o microcontrolador ATmega328P.
+
+### Contexto
+
+O ATmega328P, usado no Arduino Uno, possui pinos de
+interrupção externa (como INT0 e INT1) que podem ser
+configurados para disparar em diferentes condições, como
+uma mudança de nível, uma borda de subida ou uma borda
+de descida. Essas configurações são feitas utilizando os
+registradores de controle de interrupção externa.
+
+### Registrador EICRA
+
+O registrador `EICRA` (External Interrupt Control Register
+A) é usado para configurar as condições que disparam as
+interrupções externas (INT0 e INT1).
+
+- `ISC01` e `ISC00` são bits no registrador `EICRA` que
+  configuram o modo de disparo da interrupção INT0.
+- `ISC11` e `ISC10` configuram o modo de disparo da
+  interrupção INT1.
+
+### Configuração para Borda de Descida
+
+Para configurar a interrupção INT0 para disparar na borda
+de descida, você precisa ajustar os bits `ISC01` e `ISC00`
+da seguinte maneira:
+
+- `ISC01` = 1
+- `ISC00` = 0
+
+Aqui está o que essas linhas de código fazem:
+
+```c
+// Configura a interrupção para disparar na borda de descida
+EICRA |= (1 << ISC01);
+EICRA &= ~(1 << ISC00);
+```
+
+### Explicação do Código
+
+1. **EICRA |= (1 << ISC01);**
+
+   Esta linha usa uma operação OR bit a bit (`|=`) para
+   definir o bit `ISC01` no registrador `EICRA`:
+
+   - `(1 << ISC01)` cria uma máscara onde apenas o bit
+     `ISC01` está definido como 1.
+   - `EICRA |= (1 << ISC01);` aplica essa máscara ao
+     registrador `EICRA`, garantindo que o bit `ISC01`
+     seja definido como 1, enquanto mantém os outros bits
+     inalterados.
+
+2. **EICRA &= ~(1 << ISC00);**
+
+   Esta linha usa uma operação AND bit a bit com o
+   complemento (`&= ~`) para limpar o bit `ISC00` no
+   registrador `EICRA`:
+
+   - `(1 << ISC00)` cria uma máscara onde apenas o bit
+     `ISC00` está definido como 1.
+   - `~(1 << ISC00)` inverte essa máscara, resultando em
+     uma máscara onde todos os bits são 1, exceto `ISC00`,
+     que é 0.
+   - `EICRA &= ~(1 << ISC00);` aplica essa máscara ao
+     registrador `EICRA`, garantindo que o bit `ISC00`
+     seja definido como 0, enquanto mantém os outros bits
+     inalterados.
+
+### Resumo
+
+Configurando `ISC01` para 1 e `ISC00` para 0, o registrador
+`EICRA` é ajustado para que a interrupção INT0 dispare na
+borda de descida do sinal. Aqui está uma tabela resumindo
+as configurações possíveis para `ISC01` e `ISC00`:
+
+| ISC01 | ISC00 | Condição de Disparo             |
+| ----- | ----- | ------------------------------- |
+| 0     | 0     | Nível baixo                     |
+| 0     | 1     | Qualquer mudança de nível       |
+| 1     | 0     | Borda de descida (falling edge) |
+| 1     | 1     | Borda de subida (rising edge)   |
+
+Portanto, as linhas de código fornecidas configuram
+corretamente a interrupção para disparar quando o sinal no
+pino INT0 passa de alto para baixo (borda de descida).
