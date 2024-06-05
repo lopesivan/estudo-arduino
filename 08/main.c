@@ -59,6 +59,7 @@ void usart_print (const char* str)
 void usart_println (const char* str)
 {
     usart_print (str);
+    usart_transmit ('\r');
     usart_transmit ('\n');
 }
 
