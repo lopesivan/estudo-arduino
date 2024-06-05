@@ -2,8 +2,6 @@
 #include <avr/interrupt.h>
 
 #define ADC_PRESCALER 128
-#define BAUD 9600
-#define MYUBRR F_CPU/16/BAUD-1
 #define TIMER1_PRESCALER 64
 #define REF 2.5
 
@@ -18,46 +16,6 @@ volatile float ramp1 = 0.0;
 volatile float ramp2 = 0.0;
 volatile float delta = .5;
 
-void usart_init (unsigned int ubrr)
-{
-    // Configura a taxa de transmissão
-    UBRR0H = (unsigned char) (ubrr >> 8);
-    UBRR0L = (unsigned char)ubrr;
-    // Habilita o transmissor
-    UCSR0B = (1 << TXEN0);
-    // Define o formato da trama: 8 bits de dados, 1 bit de parada
-    UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
-}
-
-void usart_transmit (unsigned char data)
-{
-    // Aguarda até o buffer de transmissão estar vazio
-    while (! (UCSR0A & (1 << UDRE0)));
-    // Envia o dado
-    UDR0 = data;
-}
-
-void usart_print (const char* str)
-{
-    while (*str)
-    {
-        usart_transmit (*str++);
-    }
-}
-
-void usart_println (const char* str)
-{
-    usart_print (str);
-    usart_transmit ('\r');
-    usart_transmit ('\n');
-}
-
-void usart_print_float (float value)
-{
-    char buffer[20];
-    dtostrf (value, 6, 2, buffer);
-    usart_print (buffer);
-}
 
 void adc_init (void)
 {
@@ -102,8 +60,6 @@ ISR (TIMER1_COMPA_vect)
         ramp += delta;
     }
 
-    usart_print_float (ramp);
-    usart_println ("");
     if (ramp >5 )
         ramp = 0;
 
@@ -123,7 +79,6 @@ int main (void)
 {
     adc_init();
     timer1_init();
-    usart_init (MYUBRR);
     sei(); // Habilita interrupções globais
 
     // Inicializa o pino PB5 como saída
