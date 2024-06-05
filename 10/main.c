@@ -76,7 +76,6 @@ int main (void)
     usart_init (MYUBRR);
 
     uint16_t adc_value;
-    uint16_t max = 0;
     float voltage;
 
     while (1)
@@ -84,16 +83,11 @@ int main (void)
         adc_value = adc_read (0); // Lê o valor do pino analógico A0
         voltage = adc_value * (5.0 / 1023.0); // Converte para tensão
 
-        if (voltage > max)
-        {
-            max = voltage;
-        }
 
         // Envia o valor pela porta serial
-        usart_print ("Max Tensao: ");
-        usart_print_float (max);
-        usart_println (" V");
+        usart_print_float (voltage);
+        usart_println ("");
 
-        _delay_ms (1); // Ajusta a taxa de amostragem para 1 ms (~1 kHz)
+        // _delay_ms (1); // Ajusta a taxa de amostragem para 1 ms (~1 kHz)
     }
 }
